@@ -500,8 +500,8 @@ print(sentiment_dic)
 
 
 def plotPieChart(positive,negative, neutral,nterms,search_term):
-        labels = ['Positive [' + str(sentiment_dic['POSITIVE']/nterms) + '%]','Neutral [' + str(sentiment_dic['NEUTRAL']/nterms) + '%]',
-                  'Negative [' + str(sentiment_dic['NEGATIVE']/nterms) + '%]']
+        labels = ['Positive [' + str((sentiment_dic['POSITIVE']/nterms)*100) + '%]','Neutral [' + str((sentiment_dic['NEUTRAL']/nterms)*100) + '%]',
+                  'Negative [' + str((sentiment_dic['NEGATIVE']/nterms)*100) + '%]']
         sizes = [positive, neutral, negative]
         colors = ['darkgreen', 'gold', 'red']
         patches, texts = plt.pie(sizes, colors=colors, startangle=90)
