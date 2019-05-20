@@ -1,10 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[1]:
-
-
-# DataFrame
 import pandas as pd
 
 # Matplot
@@ -31,9 +25,6 @@ import nltk
 from nltk.corpus import stopwords
 from  nltk.stem import SnowballStemmer
 
-# Word2vec
-import gensim
-
 # Utility
 import re
 import numpy as np
@@ -54,10 +45,6 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 from keras.layers import Input
 from keras.models import Model
 
-
-# In[3]:
-
-
 nltk.download('stopwords')
 
 
@@ -72,11 +59,6 @@ TRAIN_SIZE = 0.8
 # TEXT CLENAING
 TEXT_CLEANING_RE = "@\S+|https?:\S+|http?:\S|[^A-Za-z0-9]+"
 
-# WORD2VEC 
-W2V_SIZE = 300
-W2V_WINDOW = 7
-W2V_EPOCH = 32
-W2V_MIN_COUNT = 10
 
 # KERAS
 SEQUENCE_LENGTH = 300
@@ -331,26 +313,12 @@ ls = [i.split() for i in st]
 print(ls)
 
 
-# In[305]:
-
-
 ind = tweet_to_indices(ls,wi,max_len)
-
-
-# In[306]:
-
-
 print(ind)
 print(wi['is'])
 
 
-# In[307]:
-
-
 Y_pre = model.predict(ind)
-
-
-# In[308]:
 
 
 print(Y_pre.shape[0])
@@ -367,21 +335,14 @@ for i in range(Y_pre.shape[0]):
 print(labe)
 
 
-# In[309]:
-
 
 for i in range(len(labe)):
     print(st[i], 'depicts', labe[i], 'sentiment')
 
 
-# In[175]:
 
 
 import tweepy
-
-
-# In[249]:
-
 
 consumerKey = 'pqN5ROaL6jONqzcxstuTotKYk'
 consumerSecret = 'e0HL0YhdzsNrYa5Mz8DuGDjDiqvTc6Z9384V71e7t8LIB3cNly'
@@ -392,59 +353,26 @@ auth.set_access_token(accessToken, accessTokenSecret)
 api = tweepy.API(auth)
 
 # input for term to be searched and how many tweets to search
-searchTerm = input("Enter Keyword/Tag to search about: ")
-NoOfTerms = int(input("Enter how many tweets to search: "))
+search_term = "Odd Even"
+nterms = 1000
 
 # searching for tweets
 tweets = tweepy.Cursor(api.search, q=searchTerm, lang = "en",tweet_mode = 'extended').items(NoOfTerms)
 
-
-# In[250]:
-
-
 print(type(tweets))
 
-
-# In[251]:
-
-
 text = []
-
-
-# In[252]:
-
 
 for i in tweets:
     text.append(preprocess(''.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t]) | (\w +:\ / \ / \S +)", " ",i.full_text))))
 
 
-# In[254]:
-
-
 print(len(text))
-
-
-# In[255]:
-
-
 tweets = [_text.split() for _text in text] 
 
-
-# In[256]:
-
-
 print(len(tweets))
-
-
-# In[258]:
-
-
 print(text[:5])
 print(tweets[:5])
-
-
-# In[261]:
-
 
 lst = []
 for i in range(len(tweets)):
@@ -452,27 +380,10 @@ for i in range(len(tweets)):
 print(max(lst))
 print(np.mean(lst))
 
-
-# In[275]:
-
-
 tindices = tweet_to_indices(tweets,wi,10)
 
-
-# In[276]:
-
-
 Y_pred = model.predict(tindices)
-
-
-# In[277]:
-
-
 print(Y_pred.shape)
-
-
-# In[278]:
-
 
 label = []
 for i in range(Y_pred.shape[0]):
@@ -482,23 +393,9 @@ for i in range(Y_pred.shape[0]):
         label.append('NEUTRAL')
     else:
         label.append('POSITIVE')
-
-
-# In[280]:
-
-
+        
 sentiment_dic = Counter(label)
-
-
-# In[283]:
-
-
 print(sentiment_dic)
-
-
-# In[289]:
-
-
 def plotPieChart(positive,negative, neutral,nterms,search_term):
         labels = ['Positive [' + str((sentiment_dic['POSITIVE']/nterms)*100) + '%]','Neutral [' + str((sentiment_dic['NEUTRAL']/nterms)*100) + '%]',
                   'Negative [' + str((sentiment_dic['NEGATIVE']/nterms)*100) + '%]']
@@ -512,20 +409,8 @@ def plotPieChart(positive,negative, neutral,nterms,search_term):
         plt.show()
 
 
-# In[290]:
-
-
-nterms = 1000
-search_term = 'KEJRIWAL'
-
-
-# In[291]:
-
-
 plotPieChart(sentiment_dic['POSITIVE']/nterms,sentiment_dic['NEGATIVE']/nterms,sentiment_dic['NEUTRAL']/nterms,nterms,search_term)
 
-
-# In[ ]:
 
 
 
